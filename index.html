@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ru" ng-app="employeeApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SUPA Test Project</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/sortable.js"></script>
+    <script>
+        var employeeList = [
+            {name:'Иванов Иван'},
+            {name:'Сергеев Сергей'},
+            {name:'Алексеев Алексей'}
+        ];
+
+        var employeeApp = angular.module("employeeApp",['ui.sortable']);
+        employeeApp.controller('employeeCtrl',function ($scope) {
+            // передача модели в контроллер
+            $scope.employeeList = employeeList;
+
+            // Добавление нового сотрудника
+            $scope.addNewEmployee = function () {
+                $scope.employeeList.push({
+                    name: $scope.text
+                })
+            };
+            // Удаление сотрудника
+            $scope.deleteEmployee = function (i) {
+                $scope.employeeList.splice(i, 1);
+            }
+        });
+    </script>
+</head>
+<body>
+<div id="wrapper">
+    <section class="employees_block">
+        <h1>Сотрудники</h1>
+        <input type="text" class="search form-control" placeholder="Поиск по ключевому слову" ng-model="search">
+        <div ng-controller="employeeCtrl">
+            <div class="list" ui-sortable ng-model="employeeList">
+                <div class="employee_item"  ng-repeat="(key,employee) in employeeList | filter:search">
+                    <div>
+                        {{employee.name}}
+                        <i class="fa fa-times" aria-hidden="true" ng-click="deleteEmployee(key)"></i>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="input-group">
+                <input class="form-control" placeholder="Введите имя нового сотрудника" type="text" ng-model="text">
+                <button class="btn btn-success" ng-click="addNewEmployee()">Добавить</button>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
